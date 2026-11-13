@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TandemSwap — Free Language Exchange</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.3);
+            --match-color: #10b981;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --border: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 30px; padding: 25px; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); }
+        header h1 { font-size: 1.8rem; color: var(--accent); margin-bottom: 8px; }
+        header p { color: var(--text-sub); font-size: 0.95rem; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border); }
+        .card h2 { font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 0.85rem; color: var(--text-sub); margin-bottom: 5px; }
+        input, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: #0f172a; color: white; font-size: 0.95rem; }
+        input:focus, select:focus { outline: none; border-color: var(--accent); }
+        button { width: 100%; padding: 12px; background: var(--accent); color: white; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        .listings-section { margin-top: 30px; }
+        .listings-section h2 { margin-bottom: 15px; }
+        .listing-card { background: var(--card-bg); border: 1px solid var(--border); padding: 18px; border-radius: 12px; margin-bottom: 12px; position: relative; }
+        .listing-card.perfect-match { border-color: var(--match-color); box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+        .badge { position: absolute; top: 18px; right: 18px; background: var(--border); color: var(--text-sub); font-size: 0.75rem; padding: 4px 10px; border-radius: 20px; font-weight: bold; }
+        .listing-card.perfect-match .badge { background: var(--match-color); color: #0f172a; }
+        .listing-card h3 { font-size: 1.1rem; margin-bottom: 5px; }
+        .listing-card p { font-size: 0.9rem; color: var(--text-sub); margin-bottom: 10px; }
+        .lang-tags { display: flex; gap: 10px; font-size: 0.85rem; margin-top: 10px; flex-wrap: wrap; }
+        .tag-native { background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 4px 10px; border-radius: 6px; }
+        .tag-learning { background: rgba(236, 72, 153, 0.2); color: #f472b6; padding: 4px 10px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TandemSwap 🗣️🌍</h1>
+            <p>නොමිලේ භාෂා ඉගෙන ගන්න - මව් භාෂාව උගන්වමින් වෙනත් අය සමඟ සම්බන්ධ වන්න</p>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <h2>✨ ඔබේ පැතිකඩ (Profile) සාදන්න</h2>
+                <div class="form-group">
+                    <label>ඔබේ නම</label>
+                    <input type="text" id="userName" placeholder="උදා: සචින්ත">
+                </div>
+                <div class="form-group">
+                    <label>ඔබේ මව් භාෂාව (Native Language)</label>
+                    <input type="text" id="userNative" placeholder="උදා: සිංහල (Sinhala)">
+                </div>
+                <div class="form-group">
+                    <label>ඔබට ඉගෙන ගැනීමට අවශ්‍ය භාෂාව (Learning)</label>
+                    <input type="text" id="userLearning" placeholder="උදා: ඉතාලි (Italian)">
+                </div>
+                <div class="form-group">
+                    <label>සම්බන්ධ වීමට (WhatsApp අංකය හෝ ඊමේල්)</label>
+                    <input type="text" id="userContact" placeholder="උදා: +94 77 123 4567">
+                </div>
+                <button onclick="postListing()">Tandem පුවරුවට එකතු කරන්න</button>
+            </div>
+
+            <div class="card">
+                <h2>💡 මෙහි විශේෂත්වය</h2>
+                <p style="color: var(--text-sub); line-height: 1.6; font-size: 0.9rem;">
+                    1. මෙහි මුදල් හුවමාරුවක් සිදු නොවේ. ඔබ දන්නා භාෂාව වෙනත් කෙනෙකුට උගන්වා, ඔබට අවශ්‍ය භාෂාව ඔහුගෙන් නොමිලේ පුහුණු වන්න.<br><br>
+                    2. කෙනෙකුගේ අවශ්‍යතාවය ඔබගේ ඉගෙනුම් භාෂාවට හරියටම ගැළපෙන විට, එම කාඩ්පත ස්වයංක්‍රීයව **🟢 Perfect Match** ලෙස කොළ පාටින් දිලිසෙනු ඇත!<br><br>
+                    3. WhatsApp හරහා කෙලින්ම කතා කර සාකච්ඡා ආරම්භ කරන්න.
+                </p>
+            </div>
+        </div>
+
+        <div class="listings-section">
+            <h2>🌍 භාෂා හුවමාරු ප්‍රජාව (Language Partners)</h2>
+            <div id="listingsContainer">
+                <!-- Listings will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let listings = JSON.parse(localStorage.getItem('tandem_listings')) || [
+            { name: "Marco", native: "ඉතාලි (Italian)", learning: "සිංහල (Sinhala)", contact: "marco@email.com" },
+            { name: "ෂෙහාන්", native: "සිංහල (Sinhala)", learning: "ඉතාලි (Italian)", contact: "+94 71 987 6543" }
+        ];
+
+        function renderListings() {
+            const container = document.getElementById('listingsContainer');
+            container.innerHTML = '';
+            
+            listings.forEach((item) => {
+                container.innerHTML += `
+                    <div class="listing-card">
+                        <span class="badge">Language Partner</span>
+                        <h3>👤 ${item.name}</h3>
+                        <p>📞 සම්බන්ධ වීමට: <strong>${item.contact}</strong></p>
+                        <div class="lang-tags">
+                            <span class="tag-native">මව් භාෂාව (Native): ${item.native}</span>
+                            <span class="tag-learning">ඉගෙන ගනී (Learning): ${item.learning}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function postListing() {
+            const name = document.getElementById('userName').value.trim();
+            const native = document.getElementById('userNative').value.trim();
+            const learning = document.getElementById('userLearning').value.trim();
+            const contact = document.getElementById('userContact').value.trim();
+
+            if(!name || !native || !learning || !contact) {
+                alert('කරුණාකර සියලුම කොටස් පුරවන්න!');
+                return;
+            }
+
+            const newListing = { name, native, learning, contact };
+            listings.unshift(newListing);
+            localStorage.setItem('tandem_listings', JSON.stringify(listings));
+
+            document.getElementById('userName').value = '';
+            document.getElementById('userNative').value = '';
+            document.getElementById('userLearning').value = '';
+            document.getElementById('userContact').value = '';
+
+            renderListings();
+            alert('ඔබේ පැතිකඩ සාර්ථකව එකතු විය!');
+        }
+
+        renderListings();
+    </script>
+</body>
+</html>
